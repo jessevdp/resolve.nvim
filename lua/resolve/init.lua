@@ -17,6 +17,10 @@ local config = {
   -- Callback function called when all conflicts are resolved
   -- Receives: { bufnr = number }
   on_conflicts_resolved = nil,
+  -- Notification options
+  notify = {
+    on_detect = true, -- show "Found N conflict(s)" on BufRead/BufEnter
+  },
 }
 
 --- Set up highlight groups with colours appropriate for the current background
@@ -337,7 +341,9 @@ function M.detect_conflicts()
   local conflicts = scan_conflicts()
 
   if #conflicts > 0 then
-    vim.notify(string.format("Found %d conflict(s)", #conflicts), vim.log.levels.INFO)
+    if config.notify.on_detect then
+      vim.notify(string.format("Found %d conflict(s)", #conflicts), vim.log.levels.INFO)
+    end
     M.highlight_conflicts(conflicts)
 
     -- Set up buffer-local keymaps if enabled

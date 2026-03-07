@@ -94,6 +94,10 @@ require("resolve").setup({
   -- Callback function called when all conflicts are resolved
   -- Receives: { bufnr = number }
   on_conflicts_resolved = nil,
+  -- Notification options
+  notify = {
+    on_detect = true, -- show "Found N conflict(s)" on BufRead/BufEnter
+  },
 })
 ```
 
