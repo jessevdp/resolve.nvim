@@ -94,6 +94,12 @@ require("resolve").setup({
   -- Callback function called when all conflicts are resolved
   -- Receives: { bufnr = number }
   on_conflicts_resolved = nil,
+  -- Options passed to nvim_open_win for the diff floating window.
+  -- Window geometry is computed automatically.
+  diff_window = {
+    border = "rounded",
+    -- title_pos = "center",
+  },
 })
 ```
 

@@ -17,6 +17,11 @@ local config = {
   -- Callback function called when all conflicts are resolved
   -- Receives: { bufnr = number }
   on_conflicts_resolved = nil,
+  -- Options passed to nvim_open_win for the diff floating window.
+  -- Window geometry is computed automatically.
+  diff_window = {
+    border = "rounded",
+  },
 }
 
 --- Set up highlight groups with colours appropriate for the current background
@@ -699,8 +704,7 @@ local function display_diff_window(output, title)
   -- Create buffer for the floating window
   local buf = vim.api.nvim_create_buf(false, true)
 
-  -- Create floating window
-  local win = vim.api.nvim_open_win(buf, true, {
+  local win_opts = vim.tbl_extend("force", {
     relative = "editor",
     width = width,
     height = height,
@@ -708,9 +712,12 @@ local function display_diff_window(output, title)
     col = col,
     style = "minimal",
     border = "rounded",
-    title = title,
     title_pos = "center",
-  })
+  }, config.diff_window or {})
+  win_opts.title = title
+
+  -- Create floating window
+  local win = vim.api.nvim_open_win(buf, true, win_opts)
 
   -- Use nvim_open_term to create a pseudo-terminal that interprets ANSI codes
   -- This gives us colours without an actual process (no "[Process exited]" message)
